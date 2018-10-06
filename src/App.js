@@ -27,10 +27,16 @@ class App extends Component {
 
     this.state = {
       list,
+      searchTerm: "",
     };
 
+    this.onSearchChange = this.onSearchChange.bind(this);
     this.onDismiss = this.onDismiss.bind(this);
   }
+
+  onSearchChange(event) {
+    this.setState({ searchTerm: event.target.value })
+  };
 
   onDismiss(id) {
     function isNotId(item) {
@@ -40,10 +46,20 @@ class App extends Component {
     this.setState({ list: updatedList });
   };
 
+  isSearched(searchTerm) {
+    return (item)=> {
+      return (item.title.toLowerCase().includes(searchTerm.toLowerCase()))
+    }
+  };
+
   render() {
     return (
       <div className="App">
-	{this.state.list.map(item =>
+	<input
+	  type="text"
+	  onChange={this.onSearchChange}
+	/>
+	{this.state.list.filter(this.isSearched(this.state.searchTerm)).map(item =>
           <div key={item.objectID}>
 	    <span>
 	      <a href={item.url}>{item.title}</a></span>
